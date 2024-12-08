@@ -7,6 +7,7 @@ GaMaDHaNi is a modular two-level hierarchy, consisting of a generative model on 
 :headphones: Check out the audio samples [here](https://snnithya.github.io/gamadhani-samples/)\
 :computer: Play with the interactive demo [here](https://huggingface.co/spaces/snnithya/GaMaDHaNi) 
 ## Installation
+[Create a Python environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html) with Python version = 3.10
 
    ```bash
    git clone https://github.com/snnithya/GaMaDHaNi.git
