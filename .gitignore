@@ -1,9 +1,12 @@
-src/__pycache__/
-.ipynb_checkpoints/
-protobuf/__pycache__/
-__pycache__/
-generations
-misc
-listening_study_primes.npz
-gradio-demos
-output
+*
+
+# Allow public-folder and specific public files
+!gamadhani
+!configs
+!GaMaDHaNi.egg-info
+!__init__.py
+!GaMaDHaNi.jpg
+!generate.py
+!README.md
+!requirements.txt
+!setup.py
