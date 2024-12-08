@@ -12,6 +12,7 @@ from gamadhani.utils.utils import get_device, plot, save_figure, save_csv, save_
 from absl import app
 import logging
 from typing import Optional, Callable, Tuple, Any
+import matplotlib.pyplot as plt
 import pdb
 
 FLAGS = flags.FLAGS
@@ -63,6 +64,7 @@ def generate_pitch(pitch_model,
 
             fig = plot(f0_array=pitch, time_array=time_array, prime=prime)
             save_figure(fig, dest_path=os.path.join(outfile, f"plots/{i}.png"))
+            plt.close(fig)
     return samples, torch.Tensor(np.array(inverted_pitches)).to(pitch_model.device)
 
 def generate_audio(audio_model, f0s, invert_audio_fn, outfolder, singers=[3], num_steps=100):
@@ -119,7 +121,10 @@ def generate(audio_model=None,
             pitch[pitch < 200] = np.nan
             return pitch
         pitch = undo_qt(pitch)
-
+    elif pitch_model_type == "transformer":
+        # ensure silences are handled and values are clipped as expected
+        pitch = torch.where(pitch < 200, torch.tensor(float('nan')), pitch) # replace values less than 200 with silent token
+        pitch = torch.clip(pitch, min=200, max=600) # clip values to be within the range of the pitch model
     interpolated_pitch = p2a.interpolate_pitch(pitch=pitch, audio_seq_len=audio_seq_len)    # interpolate pitch values to match the audio model's input size
     interpolated_pitch = torch.nan_to_num(interpolated_pitch, nan=196)  # replace nan values with silent token
     interpolated_pitch = interpolated_pitch.squeeze(1) # to match input size by removing the extra dimension
